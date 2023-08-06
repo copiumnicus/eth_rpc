@@ -33,6 +33,8 @@ impl JRClient {
 
 #[cfg(test)]
 mod test {
+    use std::str::FromStr;
+
     use super::*;
     use ethers::{
         abi::AbiEncode,
@@ -60,6 +62,6 @@ mod test {
         tx.set_data(input);
 
         let res = client.eth_call(tx).unwrap();
-        println!("{:#?}", res)
+        assert_eq!(res, Bytes::from_str("0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000045553444300000000000000000000000000000000000000000000000000000000").unwrap() );
     }
 }

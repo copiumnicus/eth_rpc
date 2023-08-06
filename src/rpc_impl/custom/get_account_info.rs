@@ -16,25 +16,9 @@ fn keccak256(slice: Vec<u8>) -> [u8; 32] {
     h.finalize(&mut first_key);
     first_key
 }
-/// convert hex str to a vec of bytes
-fn to_vec(mut s: &str) -> Result<Vec<u8>, String> {
-    if s.starts_with("0x") {
-        s = &s[2..]
-    }
-    if s.len() % 2 != 0 {
-        return Err(format!(
-            "Given hex str, is not zero mod 2! len: {:?}",
-            s.len()
-        ));
-    }
-    Ok((0..s.len())
-        .step_by(2)
-        .map(|i| u8::from_str_radix(&s[i..i + 2], 16).unwrap())
-        .collect())
-}
 /// hex prefixed code hash
 fn hash_code(s: &str) -> Result<[u8; 32], String> {
-    let v: Vec<u8> = to_vec(s)?;
+    let v: Vec<u8> = crate::hex::to_vec(s)?;
     Ok(keccak256(v))
 }
 
@@ -58,7 +42,7 @@ pub fn get_code_hash_and_code(code: String) -> Result<(B256, Option<Bytecode>), 
     let code = match code.as_ref() {
         "0x" => None,
         x => {
-            let bytes = Bytes::from(to_vec(x).map_err(|e| JRError::Extension(e))?);
+            let bytes = Bytes::from(crate::hex::to_vec(x).map_err(|e| JRError::Extension(e))?);
             let bytecode = to_analysed(Bytecode::new_raw(bytes));
             Some(bytecode)
         }

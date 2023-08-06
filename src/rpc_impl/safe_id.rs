@@ -30,5 +30,5 @@ where
         }
     }
 
-    Err(D::Error::custom("cant"))
+    Err(D::Error::custom("cant deserialize safe_id"))
 }

@@ -31,6 +31,9 @@ mod test {
                 17588244,
             )
             .unwrap();
-        println!("{:#?}", res)
+        assert_eq!(
+            res,
+            U256::from_dec_str("527585359103765554095092340981710322784165800559").unwrap()
+        );
     }
 }

@@ -54,6 +54,6 @@ mod test {
                     .unwrap(),
             )
             .unwrap();
-        println!("{:#?}", res)
+        assert_eq!(res, 2199);
     }
 }

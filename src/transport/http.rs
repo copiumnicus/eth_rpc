@@ -4,10 +4,9 @@ use oxhttp::{
 };
 use serde::{de::Error, Deserialize, Deserializer, Serialize};
 use std::borrow::Cow;
-use tracing::error;
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct HttpTransport(#[serde(deserialize_with = "deserialize_http_url")] pub String);
+pub struct HttpTransport(#[serde(deserialize_with = "validate_url")] pub String);
 
 impl TryFrom<String> for HttpTransport {
     type Error = String;
@@ -17,16 +16,13 @@ impl TryFrom<String> for HttpTransport {
     }
 }
 
-fn deserialize_http_url<'de, D>(deserializer: D) -> Result<String, D::Error>
+fn validate_url<'de, D>(deserializer: D) -> Result<String, D::Error>
 where
     D: Deserializer<'de>,
 {
     let s = Cow::<str>::deserialize(deserializer)?;
-    if let Err(e) = Url::parse(&s).map_err(D::Error::custom) {
-        println!("Failed to deserialize url. Got `{}`", s);
-        error!("Failed to deserialize url. Got `{}`", s);
-        return Err(e);
-    }
+    // check if url parses
+    Url::parse(&s).map_err(D::Error::custom)?;
     Ok(s.into())
 }
 
@@ -128,6 +124,7 @@ mod test {
             )
             .unwrap();
         let res_str = String::from_utf8(result).unwrap();
-        println!("{:?}", res_str);
+        // check if contains 0x11e1a300 which is the `effectiveGasPrice`
+        assert!(res_str.contains("0x11e1a300"));
     }
 }

@@ -76,10 +76,7 @@ mod test {
             .unwrap();
         println!("{:#?}", res);
 
-        let res = client.get_symbol(token).unwrap();
-        println!("{:#?}", res);
-
-        let res = client.get_decimals(token).unwrap();
-        println!("{:#?}", res);
+        assert_eq!(client.get_symbol(token).unwrap(), format!("BADGER"));
+        assert_eq!(client.get_decimals(token).unwrap(), 18);
     }
 }

@@ -39,6 +39,6 @@ mod test {
         tx.set_data(input);
 
         let res = client.estimate_gas(tx).unwrap();
-        println!("{:#?}", res)
+        assert_eq!(res, 31434);
     }
 }

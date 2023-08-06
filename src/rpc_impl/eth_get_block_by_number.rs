@@ -19,6 +19,6 @@ mod test {
     fn test_get_block_by_number() {
         let client = JRClient::from_env().unwrap();
         let res = client.get_block_by_number(U256::from(17633288)).unwrap();
-        println!("{:#?}", res)
+        assert_eq!(res.size, Some(U256::from(312244)));
     }
 }

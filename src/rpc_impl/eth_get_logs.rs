@@ -32,23 +32,6 @@ pub mod vec_bytes_hex {
         )
     }
 
-    /// convert hex str to a vec of bytes
-    fn to_vec(mut s: &str) -> Result<Vec<u8>, String> {
-        if s.starts_with("0x") {
-            s = &s[2..]
-        }
-        if s.len() % 2 != 0 {
-            return Err(format!(
-                "Given hex str, is not zero mod 2! len: {:?}",
-                s.len()
-            ));
-        }
-        Ok((0..s.len())
-            .step_by(2)
-            .map(|i| u8::from_str_radix(&s[i..i + 2], 16).unwrap())
-            .collect())
-    }
-
     pub fn serialize<S>(value: &Vec<u8>, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
@@ -61,7 +44,7 @@ pub mod vec_bytes_hex {
         D: Deserializer<'de>,
     {
         let s = Cow::<str>::deserialize(deserializer)?;
-        to_vec(s.borrow()).map_err(D::Error::custom)
+        crate::hex::to_vec(s.borrow()).map_err(D::Error::custom)
     }
 }
 
@@ -126,6 +109,6 @@ mod test {
                     .unwrap(),
             )
             .unwrap();
-        println!("logs {:#?}", result);
+        assert_eq!(result.len(), 1);
     }
 }

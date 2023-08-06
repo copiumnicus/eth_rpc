@@ -11,6 +11,7 @@ impl JRClient {
 #[cfg(test)]
 mod test {
     use super::*;
+    use ethers::types::U256;
 
     #[test]
     fn test_get_transaction() {
@@ -22,6 +23,6 @@ mod test {
                     .unwrap(),
             )
             .unwrap();
-        println!("{:#?}", res)
+        assert_eq!(res.max_priority_fee_per_gas, Some(U256::from(5148613256u128)));
     }
 }

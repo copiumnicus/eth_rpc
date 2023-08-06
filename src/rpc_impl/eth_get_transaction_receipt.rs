@@ -12,6 +12,7 @@ impl JRClient {
 #[cfg(test)]
 mod test {
     use super::*;
+    use ethers::types::U256;
 
     #[test]
     fn test_get_receipt() {
@@ -23,6 +24,6 @@ mod test {
                     .unwrap(),
             )
             .unwrap();
-        println!("{:#?}", res)
+        assert_eq!(res.cumulative_gas_used, U256::from(1819398));
     }
 }
