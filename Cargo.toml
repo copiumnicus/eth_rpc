@@ -4,6 +4,10 @@ version = "0.1.0"
 edition = "2021"
 description = "simple eth rpc with helper functions"
 license = "MIT OR Apache-2.0"
+readme = "README.md"
+homepage = "https://github.com/copiumnicus/eth_rpc"
+repository = "https://github.com/copiumnicus/eth_rpc"
+keywords = ["web3", "ethereum", "rpc", "api", "jsonbatch"]
 
 [dependencies]
 tiny-keccak = { version = "2.0", features = ["keccak"] }
