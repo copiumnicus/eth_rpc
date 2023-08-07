@@ -1,5 +1,7 @@
 # eth_rpc
 
+[![Test](https://github.com/copiumnicus/eth_rpc/actions/workflows/test.yaml/badge.svg)](https://github.com/copiumnicus/eth_rpc/actions/workflows/test.yaml)
+
 ## Features
 
 eth_rpc is a simple, portable eth rpc (partial) implementation with features like:
