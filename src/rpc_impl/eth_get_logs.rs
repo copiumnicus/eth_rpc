@@ -83,7 +83,7 @@ impl JRClient {
                 address,
             }],
         )?;
-        let logs: Vec<GetLogsEvent> = self.no_error_rpc(payload)?;
+        let logs: Vec<GetLogsEvent> = self.no_ratelimit_rpc(payload)?;
         Ok(logs.into_iter().filter(|a| !a.removed).collect())
     }
 }

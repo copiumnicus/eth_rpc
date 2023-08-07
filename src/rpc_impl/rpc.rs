@@ -149,27 +149,6 @@ impl JRClient {
         }
     }
 
-    /// no errors rpc
-    /// for critical application like `market_refs`
-    pub fn no_error_rpc<R>(&self, jr: JRCall) -> Result<R, JRError>
-    where
-        R: for<'a> Deserialize<'a>,
-    {
-        let params = jr.to_vec()?;
-        let mut backoff_sec = 1;
-        loop {
-            let res = self.call_rpc_transport(params.as_slice());
-            if let Err(e) = res {
-                warn!("{:?}", e);
-                std::thread::sleep(Duration::from_secs(backoff_sec));
-                backoff_sec += 1;
-                continue;
-            }
-
-            return res;
-        }
-    }
-
     /// unwraps jsonrpc response into a desired type
     pub(crate) fn call_rpc_transport<R>(&self, request: &[u8]) -> Result<R, JRError>
     where
