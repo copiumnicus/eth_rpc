@@ -50,7 +50,7 @@ pub fn get_symbol(&self, token: H160) -> Result<String, JRError>;
 pub fn get_bytes32_symbol(&self, token: H160) -> Result<String, JRError>;
 ```
 
-Custom tx submit error (will handle more based on upstream demand)
+Custom tx submit error (will handle more based on downstream demand)
 ```rust
 #[derive(Debug)]
 pub enum SubmitTxError {
