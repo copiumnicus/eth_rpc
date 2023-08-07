@@ -7,7 +7,6 @@ pub enum SubmitTxError {
     NonceTooLow,
     ReplacementUnderpriced,
     BaseGasPriceTooLow(String),
-    Other(String),
 }
 
 impl EthRpc {
