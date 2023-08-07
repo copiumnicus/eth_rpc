@@ -34,6 +34,8 @@ jobs:
             target
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Cargo.lock') }}
       - name: Run test 
+        env:
+          ETH_RPC_HTTP: ${{secrets.ETH_RPC_HTTP}}
         run: |
           cargo build;
           cargo test -- --nocapture;
