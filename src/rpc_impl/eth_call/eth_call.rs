@@ -1,10 +1,10 @@
-use crate::{JRCall, JRClient, JRError};
+use crate::{JRCall, EthRpc, JRError};
 use ethers::{
     abi::{AbiDecode, AbiEncode},
     types::{transaction::eip2718::TypedTransaction, Bytes, H160, U256},
 };
 
-impl JRClient {
+impl EthRpc {
     pub fn eth_call(&self, tx: TypedTransaction) -> Result<Bytes, JRError> {
         let payload = JRCall::new(
             "eth_call",
@@ -51,7 +51,7 @@ mod test {
 
     #[test]
     fn test_eth_call() {
-        let client = JRClient::from_env().unwrap();
+        let client = EthRpc::from_env().unwrap();
         let input = Bytes::from(SymbolCall {}.encode());
         let mut tx = TypedTransaction::default();
         tx.set_to(

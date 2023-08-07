@@ -1,4 +1,4 @@
-use super::{JRCall, JRClient, JRError};
+use super::{JRCall, EthRpc, JRError};
 use ethers::types::{Bytes, H256};
 
 #[derive(Debug)]
@@ -10,7 +10,7 @@ pub enum SubmitTxError {
     Other(String),
 }
 
-impl JRClient {
+impl EthRpc {
     pub fn send_raw_tx(&self, bytes: Bytes) -> Result<H256, SubmitTxError> {
         let payload = JRCall::new("eth_sendRawTransaction", vec![bytes])
             .map_err(|e| SubmitTxError::JRErr(e))?;
@@ -46,7 +46,7 @@ mod test {
 
     #[test]
     fn test_get_nonce() {
-        let client = JRClient::from_env().unwrap();
+        let client = EthRpc::from_env().unwrap();
         let res = client
             .get_transaction_count(
                 "0xD8b9c8e1a94baEAaf4D1CA2C45723eb88236130E"

@@ -63,7 +63,7 @@ impl TryFrom<Value> for SafeJRResult {
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug)]
-pub struct JRClient {
+pub struct EthRpc {
     pub transport: RpcTransport,
     pub batch_chunk_size: Option<usize>,
 }
@@ -105,7 +105,7 @@ impl JRError {
     }
 }
 
-impl JRClient {
+impl EthRpc {
     pub fn from_env() -> Result<Self, JRError> {
         let http = EnvHttp::http().map_err(|e| JRError::Transport(e))?;
         Ok(Self {

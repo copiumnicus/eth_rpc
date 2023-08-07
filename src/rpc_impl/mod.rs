@@ -18,4 +18,4 @@ pub use custom::*;
 pub use eth_get_logs::GetLogsEvent;
 pub use eth_send_raw_tx::SubmitTxError;
 pub use jr_call::JRCall;
-pub use rpc::{JRClient, JRError, SafeJRResult};
+pub use rpc::{EthRpc, JRError, SafeJRResult};

@@ -1,7 +1,7 @@
-use super::{JRCall, JRClient, JRError};
+use super::{JRCall, EthRpc, JRError};
 use ethers::types::{transaction::eip2718::TypedTransaction, U256};
 
-impl JRClient {
+impl EthRpc {
     pub fn estimate_gas(&self, tx: TypedTransaction) -> Result<u64, JRError> {
         let payload = JRCall::new("eth_estimateGas", vec![tx])?;
         let v: U256 = self.no_ratelimit_rpc(payload)?;
@@ -27,7 +27,7 @@ mod test {
 
     #[test]
     fn test_estimate_gas() {
-        let client = JRClient::from_env().unwrap();
+        let client = EthRpc::from_env().unwrap();
 
         let input = Bytes::from(SymbolCall {}.encode());
         let mut tx = TypedTransaction::default();

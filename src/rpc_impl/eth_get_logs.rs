@@ -1,4 +1,4 @@
-use super::rpc::{JRClient, JRError};
+use super::rpc::{EthRpc, JRError};
 use crate::rpc_impl::jr_call::JRCall;
 use ethers::types::{H160, H256, U256};
 use serde::{Deserialize, Serialize};
@@ -62,7 +62,7 @@ pub struct GetLogsEvent {
     pub log_index: U256,
 }
 
-impl JRClient {
+impl EthRpc {
     pub fn get_logs(
         &self,
         from_block: u64,
@@ -94,7 +94,7 @@ mod test {
 
     #[test]
     fn test_get_logs() {
-        let client = JRClient::from_env().unwrap();
+        let client = EthRpc::from_env().unwrap();
         let result = client
             .get_logs(
                 17240728,

@@ -1,4 +1,4 @@
-use crate::{JRCall, JRClient, JRError};
+use crate::{JRCall, EthRpc, JRError};
 use ethers::types::{H160, U256};
 use revm::{
     interpreter::analysis::to_analysed,
@@ -50,7 +50,7 @@ pub fn get_code_hash_and_code(code: String) -> Result<(B256, Option<Bytecode>), 
     Ok((code_hash, code))
 }
 
-impl JRClient {
+impl EthRpc {
     pub fn get_account_info(&self, address: H160, block: u64) -> Result<AccountInfo, JRError> {
         let params = account_params(address, block)?;
         // the length is already checked
@@ -100,7 +100,7 @@ mod test {
 
     #[test]
     fn test_get_account_info() {
-        let client = JRClient::from_env().unwrap();
+        let client = EthRpc::from_env().unwrap();
         let settlement = "0x9008D19f58AAbD9eD0D60971565AA8510560ab41"
             .parse()
             .unwrap();

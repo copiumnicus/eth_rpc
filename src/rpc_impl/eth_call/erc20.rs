@@ -1,4 +1,4 @@
-use crate::{JRClient, JRError};
+use crate::{EthRpc, JRError};
 use ethers::{
     prelude::abigen,
     types::{H160, U256},
@@ -20,7 +20,7 @@ abigen!(
 ]"#
 );
 
-impl JRClient {
+impl EthRpc {
     pub fn get_balance(&self, token: H160, account: H160) -> Result<U256, JRError> {
         let b: BalanceOfReturn = self.eth_call_typed(token, BalanceOfCall { account })?;
         Ok(b.0)
@@ -51,7 +51,7 @@ mod test {
 
     #[test]
     fn test_erc20_functions() {
-        let client = JRClient::from_env().unwrap();
+        let client = EthRpc::from_env().unwrap();
         // maker
         let symbol = client
             .get_bytes32_symbol(

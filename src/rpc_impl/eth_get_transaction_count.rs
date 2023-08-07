@@ -1,7 +1,7 @@
-use super::{JRCall, JRClient, JRError};
+use super::{JRCall, EthRpc, JRError};
 use ethers::types::{H160, U256};
 
-impl JRClient {
+impl EthRpc {
     pub fn get_transaction_count(&self, address: H160) -> Result<u64, JRError> {
         self.get_transaction_count_at(address, "latest".into())
     }
@@ -28,7 +28,7 @@ mod test {
 
     #[test]
     fn test_get_tx_count() {
-        let client = JRClient::from_env().unwrap();
+        let client = EthRpc::from_env().unwrap();
         let res = client
             .get_transaction_count_at_block(
                 "0xD8b9c8e1a94baEAaf4D1CA2C45723eb88236130E"

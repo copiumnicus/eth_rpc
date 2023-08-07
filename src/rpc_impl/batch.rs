@@ -2,13 +2,13 @@ use std::time::Duration;
 
 use super::{
     jr_call::JRCall,
-    rpc::{JRClient, JRError, SafeJRResult},
+    rpc::{EthRpc, JRError, SafeJRResult},
 };
 use itertools::Itertools;
 use serde_json::Value;
 use tracing::{debug, error, warn};
 
-impl JRClient {
+impl EthRpc {
     /// in case of error returns first JRError encountered
     pub fn batch(&self, requests: Vec<JRCall>) -> Result<Vec<SafeJRResult>, JRError> {
         // since its sync can have nice iterators again
@@ -73,7 +73,7 @@ mod test {
 
     #[test]
     fn test_batch() {
-        let client = JRClient::from_env().unwrap();
+        let client = EthRpc::from_env().unwrap();
         let requests = vec![
             JRCall::new_with_id("eth_blockNumber", Vec::new() as Vec<()>, 0).unwrap(),
             JRCall::new_with_id(
