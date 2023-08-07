@@ -3,6 +3,7 @@ name = "eth_rpc"
 version = "0.1.0"
 edition = "2021"
 description = "simple eth rpc with helper functions"
+license = "MIT OR Apache-2.0"
 
 [dependencies]
 tiny-keccak = { version = "2.0", features = ["keccak"] }
