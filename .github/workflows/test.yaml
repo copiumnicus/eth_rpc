@@ -33,7 +33,7 @@ jobs:
             ~/.cargo/registry/cache
             target
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Cargo.lock') }}
-      - name: Generate test result and coverage report
+      - name: Run test 
         run: |
           cargo build;
           cargo test -- --nocapture;
