@@ -20,3 +20,4 @@ pub use eth_get_logs::GetLogsEvent;
 pub use eth_send_raw_tx::SubmitTxError;
 pub use jr_call::JRCall;
 pub use rpc::{EthRpc, JRError, SafeJRResult};
+pub use eth_syncing::SyncStatus;
