@@ -11,6 +11,7 @@ mod eth_get_transaction_by_hash;
 mod eth_get_transaction_count;
 mod eth_get_transaction_receipt;
 mod eth_send_raw_tx;
+mod eth_syncing;
 mod jr_call;
 mod rpc;
 mod safe_id;

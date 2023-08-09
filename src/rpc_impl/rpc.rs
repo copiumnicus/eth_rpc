@@ -127,7 +127,7 @@ impl EthRpc {
         self.inner_no_ratelimit_rpc(params.as_slice())
     }
     /// no ratelimit and no network errors
-    fn inner_no_ratelimit_rpc<R>(&self, params: &[u8]) -> Result<R, JRError>
+    pub(crate) fn inner_no_ratelimit_rpc<R>(&self, params: &[u8]) -> Result<R, JRError>
     where
         R: for<'a> Deserialize<'a>,
     {
