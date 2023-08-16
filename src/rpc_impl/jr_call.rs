@@ -1,9 +1,9 @@
 use super::rpc::JRError;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// this needs to be like that for batch rpc calls to work
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct JRCall {
     #[serde(with = "super::safe_id")]
     pub id: u64,
@@ -23,7 +23,7 @@ impl JRCall {
     {
         serde_json::to_value(v).map_err(|e| JRError::JRCallSerialize(e))
     }
-    pub(crate) fn to_vec(&self) -> Result<Vec<u8>, JRError> {
+    pub fn to_vec(&self) -> Result<Vec<u8>, JRError> {
         serde_json::to_vec(&self).map_err(|e| JRError::JRCallSerialize(e))
     }
     pub fn new<T>(method: impl ToString, params: T) -> Result<Self, JRError>
