@@ -3,7 +3,7 @@ use oxhttp::{
     Client,
 };
 use serde::{de::Error, Deserialize, Deserializer, Serialize};
-use std::borrow::Cow;
+use std::{borrow::Cow, time::Duration};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct HttpTransport(#[serde(deserialize_with = "validate_url")] pub String);
@@ -37,7 +37,8 @@ pub enum HttpErr {
 
 impl HttpTransport {
     pub fn post(&self, params: &[u8]) -> Result<Vec<u8>, HttpErr> {
-        let client = Client::new();
+        let mut client = Client::new();
+        client.set_global_timeout(Duration::from_secs(10));
         // have to copy here
         let params = params.to_vec();
         let req = Request::builder(
@@ -62,7 +63,8 @@ impl HttpTransport {
     }
 
     pub fn get(&self) -> Result<Vec<u8>, HttpErr> {
-        let client = Client::new();
+        let mut client = Client::new();
+        client.set_global_timeout(Duration::from_secs(10));
         let req = Request::builder(
             Method::GET,
             self.0
