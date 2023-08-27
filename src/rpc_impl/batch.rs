@@ -18,6 +18,10 @@ impl EthRpc {
             .into_iter()
             .map(|chunk| {
                 let chunk: Vec<_> = chunk.into_iter().collect();
+                if self.disable_ratelimit_protection {
+                    debug!("DR: Getting batch chunk: {}.", chunk.len());
+                    return self.dr_batch_chunk(chunk);
+                }
                 debug!("Getting batch chunk: {}.", chunk.len());
                 self.no_ratelimit_batch_chunk(chunk)
             })
@@ -37,9 +41,15 @@ impl EthRpc {
         let requests_len = requests.len();
         let request = serde_json::to_vec(&requests).map_err(|e| JRError::JRCallSerialize(e))?;
         let mut backoff_sec = 1;
+        let mut count = 0;
         loop {
+            count += 1;
             let res = self.batch_chunk(request.as_slice());
             if let Err(e) = res {
+                if count > 4 {
+                    error!("Retries fail: {:?}", e);
+                    return Err(e);
+                }
                 if e.is_network_or_ratelimit() {
                     warn!("Batch rpc: network err or rate limited!");
                     std::thread::sleep(Duration::from_secs(backoff_sec));
@@ -58,6 +68,10 @@ impl EthRpc {
 
             return Ok(res);
         }
+    }
+    fn dr_batch_chunk(&self, requests: Vec<JRCall>) -> Result<Vec<SafeJRResult>, JRError> {
+        let request = serde_json::to_vec(&requests).map_err(|e| JRError::JRCallSerialize(e))?;
+        self.batch_chunk(request.as_slice())
     }
     /// chunk is subset of batch
     fn batch_chunk(&self, requests: &[u8]) -> Result<Vec<SafeJRResult>, JRError> {

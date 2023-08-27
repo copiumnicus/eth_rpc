@@ -145,6 +145,7 @@ impl EthRpc {
             let res = self.call_rpc_transport(params);
             if let Err(e) = res {
                 if count > 4 {
+                    error!("Retries fail: {:?}", e);
                     return Err(e);
                 }
                 if e.is_network_or_ratelimit() {
