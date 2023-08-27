@@ -66,6 +66,8 @@ impl TryFrom<Value> for SafeJRResult {
 pub struct EthRpc {
     pub transport: RpcTransport,
     pub batch_chunk_size: Option<usize>,
+    #[serde(default)]
+    pub disable_ratelimit_protection: bool,
 }
 
 #[derive(Debug)]
@@ -109,12 +111,14 @@ impl EthRpc {
     pub fn from_env() -> Result<Self, JRError> {
         let http = EnvHttp::http().map_err(|e| JRError::Transport(e))?;
         Ok(Self {
+            disable_ratelimit_protection: false,
             batch_chunk_size: Some(20_000),
             transport: RpcTransport::Http(http),
         })
     }
     pub fn with_http(http: impl ToString) -> Result<Self, JRError> {
         Ok(Self {
+            disable_ratelimit_protection: false,
             batch_chunk_size: Some(20_000),
             transport: RpcTransport::with_http(http)?,
         })
@@ -124,6 +128,9 @@ impl EthRpc {
         R: for<'a> Deserialize<'a>,
     {
         let params = jr.to_vec()?;
+        if self.disable_ratelimit_protection {
+            return self.call_rpc_transport(params.as_slice());
+        }
         self.inner_no_ratelimit_rpc(params.as_slice())
     }
     /// no ratelimit and no network errors
@@ -132,9 +139,14 @@ impl EthRpc {
         R: for<'a> Deserialize<'a>,
     {
         let mut backoff_sec = 1;
+        let mut count = 0;
         loop {
+            count += 1;
             let res = self.call_rpc_transport(params);
             if let Err(e) = res {
+                if count > 4 {
+                    return Err(e);
+                }
                 if e.is_network_or_ratelimit() {
                     warn!("Network err or rate limited!");
                     std::thread::sleep(Duration::from_secs(backoff_sec));
