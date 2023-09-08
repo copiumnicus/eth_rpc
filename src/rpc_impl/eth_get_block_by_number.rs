@@ -9,6 +9,16 @@ impl EthRpc {
         )?;
         self.no_ratelimit_rpc(payload)
     }
+    pub fn get_latest_block(&self) -> Result<Block<H256>, JRError> {
+        let payload = JRCall::new(
+            "eth_getBlockByNumber",
+            vec![
+                JRCall::to_value(String::from("latest"))?,
+                JRCall::to_value(false)?,
+            ],
+        )?;
+        self.no_ratelimit_rpc(payload)
+    }
     pub fn get_pending_block(&self) -> Result<Block<H256>, JRError> {
         let payload = JRCall::new(
             "eth_getBlockByNumber",
@@ -31,5 +41,6 @@ mod test {
         let res = client.get_block_by_number(U256::from(17633288)).unwrap();
         assert_eq!(res.size, Some(U256::from(312244)));
         client.get_pending_block().unwrap();
+        client.get_latest_block().unwrap();
     }
 }
