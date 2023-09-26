@@ -56,7 +56,7 @@ impl EthRpc {
                     backoff_sec += 1;
                     continue;
                 }
-                error!("{:?}", e);
+                // error!("{:?}", e);
                 return Err(e);
             }
 
