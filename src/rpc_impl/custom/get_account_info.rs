@@ -97,7 +97,7 @@ impl EthRpc {
 fn ethers_to_alloy(u: U256) -> revm::primitives::alloy_primitives::U256 {
     let mut bytes = [0; 32];
     u.to_big_endian(&mut bytes);
-    revm::primitives::alloy_primitives::U256::from_be_slice(bytes.as_slice())
+    revm::primitives::alloy_primitives::U256::from_be_bytes(bytes)
 }
 
 #[cfg(test)]
